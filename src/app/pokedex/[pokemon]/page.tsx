@@ -1,7 +1,18 @@
-import Link from "next/link";
+import { PokemonDetails, PokemonOtherSprites } from "types/types";
+import Image from "next/image";
 
-async function getData() {
-  const Url = "https://pokeapi.co/api/v2/pokemon";
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////// fetch request /////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export interface getPokemonProps {
+  nameOrId: string;
+}
+
+export async function getPokemon({ nameOrId }: getPokemonProps) {
+  const Url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`;
+  console.log("Url", Url);
+
   const res = await fetch(Url);
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -15,31 +26,42 @@ async function getData() {
   return res.json();
 }
 
-type data = {
-  count: number;
-  next: null | string;
-  previous: null | string;
-  results: Pokemon[];
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////// component /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+type PokemonDetailPageProps = {
+  // param aka slug is either name or id of pokemon
+  params: { pokemon: string };
 };
 
-type Pokemon = { name: string; url: string };
+export default async function PokemonDetailPage({
+  params,
+}: PokemonDetailPageProps) {
+  console.log("param", params.pokemon);
 
-export default async function Pokedex() {
-  const data: data = await getData();
-  const listOfRandomPokemon = data.results.map((pokemon, idx) => {
-    return (
-      <p key={idx}>
-        <Link href={pokemon.url}> {pokemon.name}</Link>
-      </p>
-    );
+  const pokemonDetails: PokemonDetails = await getPokemon({
+    nameOrId: params.pokemon,
   });
+
+  //TODO: make this util function to use here and in PokemonCard component
+  let image = pokemonDetails.sprites.front_default;
+  if ("other" in pokemonDetails.sprites) {
+    const otherSprites = pokemonDetails.sprites.other as PokemonOtherSprites;
+    image = otherSprites["official-artwork"].front_default;
+  }
 
   return (
     <>
-      <h1>Pokedex</h1>
-      <h2>Adding searchbar here</h2>
-      <h2>Pick a pokemon</h2>
-      {listOfRandomPokemon}
+      <h1>{pokemonDetails.name}</h1>
+      <Image
+        className="h-3/4 object-contain"
+        src={image}
+        alt={pokemonDetails.name}
+        width={500}
+        height={500}
+      ></Image>
+      <p>{pokemonDetails.weight}</p>
     </>
   );
 }
