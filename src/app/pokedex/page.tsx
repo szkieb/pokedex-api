@@ -41,11 +41,14 @@ export default async function Pokedex() {
 
   return (
     <>
-      <h1 className="pb-4">Pokedex</h1>
-      <h2 className="pb-4">Adding searchbar here</h2>
-      {/* <Searchbar searchterm="" /> */}
+      <h2 className="pb-4">Search a pokemon</h2>
+      {/* TODO improve design of searchbar */}
+      <div className="colo- w-fit rounded-md border border-teal-400 p-1">
+        <Searchbar searchterm="" />
+      </div>
       <h2 className="pb-4">Pick a pokemon</h2>
       <div className="grid grid-cols-4 gap-8 px-12">{listOfRandomPokemon}</div>
+      {/* TODO: add pagination */}
     </>
   );
 }

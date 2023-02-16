@@ -28,3 +28,5 @@ export default function Error({
     </div>
   );
 }
+
+// TODO: customize error page with pokemon meme

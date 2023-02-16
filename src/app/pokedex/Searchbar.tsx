@@ -23,7 +23,10 @@ export default function Searchbar({ searchterm }: SearchbarProps) {
 
   return (
     <Combobox value={selectedPerson} onChange={setSelectedPerson}>
-      <Combobox.Input onChange={(event) => setQuery(event.target.value)} />
+      <Combobox.Input
+        className="bg-transparent"
+        onChange={(event) => setQuery(event.target.value)}
+      />
 
       <Combobox.Options>
         {filteredPokemon.map((pokemon) => (

@@ -38,8 +38,6 @@ type PokemonDetailPageProps = {
 export default async function PokemonDetailPage({
   params,
 }: PokemonDetailPageProps) {
-  console.log("param", params.pokemon);
-
   const pokemonDetails: PokemonDetails = await getPokemon({
     nameOrId: params.pokemon,
   });
@@ -50,6 +48,8 @@ export default async function PokemonDetailPage({
     const otherSprites = pokemonDetails.sprites.other as PokemonOtherSprites;
     image = otherSprites["official-artwork"].front_default;
   }
+
+  // TODO improve design of pokemon page using page.tsx and layout.tsx
 
   return (
     <>
